@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'question_bank.dart';
 
 void main() => runApp(Quizzler());
 
@@ -26,17 +27,12 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Widget> scorekeeper = [];
-  List<String> questions = [
-    'You can lead a cow down stairs but not up stairs.',
-    'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s blood is green.'
-  ];
-  List<bool> answers = [false, true, true];
+
   bool flag = false;
 
   int newQ = 0;
   void check(bool val) {
-    if (val == answers[newQ]) {
+    if (val == question_bank.getquestionAnswer(newQ)) {
       setState(() {
         scorekeeper.add(Icon(Icons.check, color: Colors.green));
       });
@@ -56,7 +52,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions[newQ],
+                question_bank.getquestionText(newQ),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -81,10 +77,10 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  if (newQ < questions.length && !flag) {
+                  if (newQ < question_bank.getquestionsNumber() && !flag) {
                     print(newQ);
                     check(true);
-                    if (newQ < questions.length - 1) {
+                    if (newQ < question_bank.getquestionsNumber() - 1) {
                       newQ++;
                     } else {
                       flag = true;
@@ -110,10 +106,10 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  if (newQ < questions.length && !flag) {
+                  if (newQ < question_bank.getquestionsNumber() && !flag) {
                     print(newQ);
                     check(false);
-                    if (newQ < questions.length - 1) {
+                    if (newQ < question_bank.getquestionsNumber() - 1) {
                       newQ++;
                     } else {
                       flag = true;
