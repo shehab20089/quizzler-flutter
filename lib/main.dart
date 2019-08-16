@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'question_bank.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 void main() => runApp(Quizzler());
 
@@ -27,17 +28,30 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Widget> scorekeeper = [];
+  void reset() {
+    Question_bank.newQ = 0;
+    Question_bank.endFlag = false;
+    scorekeeper = [];
+  }
 
   bool flag = false;
-
-  int newQ = 0;
   void check(bool val) {
-    if (val == question_bank.getquestionAnswer(newQ)) {
+    if (val == Question_bank.getquestionAnswer()) {
       setState(() {
         scorekeeper.add(Icon(Icons.check, color: Colors.green));
       });
     } else
-      scorekeeper.add((Icon(Icons.close, color: Colors.red)));
+      setState(() {
+        scorekeeper.add(Icon(Icons.close, color: Colors.red));
+      });
+    if (Question_bank.endFlag) {
+      Alert(
+        context: context,
+        title: 'Finished!',
+        desc: 'You\'ve reached the end of the quiz.',
+      ).show();
+      reset();
+    }
   }
 
   @override
@@ -52,7 +66,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                question_bank.getquestionText(newQ),
+                Question_bank.getquestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -77,16 +91,8 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  if (newQ < question_bank.getquestionsNumber() && !flag) {
-                    print(newQ);
-                    check(true);
-                    if (newQ < question_bank.getquestionsNumber() - 1) {
-                      newQ++;
-                    } else {
-                      flag = true;
-                    }
-                    print(!flag);
-                  }
+                  Question_bank.nextquestion();
+                  check(true);
                 });
               },
             ),
@@ -106,16 +112,8 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  if (newQ < question_bank.getquestionsNumber() && !flag) {
-                    print(newQ);
-                    check(false);
-                    if (newQ < question_bank.getquestionsNumber() - 1) {
-                      newQ++;
-                    } else {
-                      flag = true;
-                    }
-                    print(!flag);
-                  }
+                  Question_bank.nextquestion();
+                  check(false);
                 });
                 //The user picked false.
               },

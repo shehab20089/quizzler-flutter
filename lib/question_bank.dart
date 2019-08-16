@@ -1,6 +1,8 @@
 import 'question.dart';
 
-class question_bank {
+class Question_bank {
+  static int newQ = 0;
+  static bool endFlag = false;
   static List<Question> _questions = [
     Question('Some cats are actually allergic to humans', true),
     Question('You can lead a cow down stairs but not up stairs.', false),
@@ -28,12 +30,20 @@ class question_bank {
         'In West Virginia, USA, if you accidentally hit an animal with your car, you are free to take it home to eat.',
         true),
   ];
-  static String getquestionText(int index) {
-    return _questions[index].text;
+  static String getquestionText() {
+    return _questions[newQ].text;
   }
 
-  static bool getquestionAnswer(int index) {
-    return _questions[index].answer;
+  static bool getquestionAnswer() {
+    return _questions[newQ].answer;
+  }
+
+  static void nextquestion() {
+    if (newQ < _questions.length - 1) {
+      // check(false);
+      newQ++;
+    } else
+      endFlag = true;
   }
 
   static int getquestionsNumber() {
