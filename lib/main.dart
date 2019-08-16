@@ -25,32 +25,25 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Widget> scorekeeper = [
-    Icon(
-      Icons.check,
-      color: Colors.green,
-    ),
-    Icon(
-      Icons.close,
-      color: Colors.red,
-    ),
-    Icon(
-      Icons.close,
-      color: Colors.red,
-    ),
-    Icon(
-      Icons.close,
-      color: Colors.red,
-    ),
-    Icon(
-      Icons.close,
-      color: Colors.red,
-    ),
-    Icon(
-      Icons.close,
-      color: Colors.red,
-    )
+  List<Widget> scorekeeper = [];
+  List<String> questions = [
+    'You can lead a cow down stairs but not up stairs.',
+    'Approximately one quarter of human bones are in the feet.',
+    'A slug\'s blood is green.'
   ];
+  List<bool> answers = [false, true, true];
+  bool flag = false;
+
+  int newQ = 0;
+  void check(bool val) {
+    if (val == answers[newQ]) {
+      setState(() {
+        scorekeeper.add(Icon(Icons.check, color: Colors.green));
+      });
+    } else
+      scorekeeper.add((Icon(Icons.close, color: Colors.red)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -63,7 +56,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                questions[newQ],
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -88,7 +81,16 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  scorekeeper.add(Icon(Icons.check, color: Colors.green));
+                  if (newQ < questions.length && !flag) {
+                    print(newQ);
+                    check(true);
+                    if (newQ < questions.length - 1) {
+                      newQ++;
+                    } else {
+                      flag = true;
+                    }
+                    print(!flag);
+                  }
                 });
               },
             ),
@@ -108,10 +110,16 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  scorekeeper.add(Icon(
-                    Icons.close,
-                    color: Colors.red,
-                  ));
+                  if (newQ < questions.length && !flag) {
+                    print(newQ);
+                    check(false);
+                    if (newQ < questions.length - 1) {
+                      newQ++;
+                    } else {
+                      flag = true;
+                    }
+                    print(!flag);
+                  }
                 });
                 //The user picked false.
               },
